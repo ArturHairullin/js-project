@@ -1,13 +1,13 @@
-const initialState = {
+export const initialState = {
     items: []
 }
 
-const ADD_ITEM = 'ADD_ITEM';
-const REMOVE_ITEM = 'REMOVE_ITEM';
-const SAVE = 'SAVE';
-const GET = 'GET';
+export const ADD_ITEM = 'ADD_ITEM';
+export const REMOVE_ITEM = 'REMOVE_ITEM';
+export const SAVE = 'SAVE';
+export const GET = 'GET';
 
-const reducer = (state = initialState, action) => {
+ const reducer = (state = initialState, action) => {
     const {type, payload} = action
     switch (type) {
         case ADD_ITEM: {
@@ -23,16 +23,20 @@ const reducer = (state = initialState, action) => {
             }
         }
         case SAVE: {
-            localStorage.clear();
-            state.items.forEach((item,index) => {localStorage.setItem(index,item)});
+            //localStorage.clear();
+            state.items.forEach((item,index) => {localStorage.setItem('' + index,JSON.stringify(item))});
             return state;
         }
         case GET: {
-            for (let i=0;i<localStorage.length;i++) {
+            let tmp = [];
+            for (let i = 0;i < localStorage.length;i++) {
                 let key = localStorage.key(i);
-                state.items.push(localStorage.getItem(key));
+                tmp.push(JSON.parse(localStorage.getItem(key)));
             }
-            return state;
+            return {
+                ...state,
+                items: tmp
+            }
         }
         default: {
             return state
@@ -40,7 +44,7 @@ const reducer = (state = initialState, action) => {
     }
 }
 
-const createStore = (reducer) => {
+export const createStore = (reducer) => {
     return {
         reducer,
         state: undefined,
@@ -54,12 +58,14 @@ const createStore = (reducer) => {
         }
     }
 }
+export const store = createStore((reducer));
 
-const store = createStore((reducer));
-
-//store.subscribe((state) => console.log(state));
 
 store.dispatch({
     type: ADD_ITEM,
+    payload: {img:'src',text:'first'}
+})
+store.dispatch({
+    type: SAVE,
     payload: {img:'src',text:'first'}
 })

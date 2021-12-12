@@ -13,10 +13,14 @@ export default class Card extends Block {
 
     render() {
         let div = document.createElement('div');
+        div.classList.add('card');
         let img = document.createElement('img');
         img.src = this.props.imgName;
         let span = document.createElement('span');
         span.textContent = this.props.textName;
+        img.classList.add('card__icon');
+        span.classList.add('card__text');
+        //let showtext = document.createElement('div');
         div.append(img,span);
         return div;
     }
